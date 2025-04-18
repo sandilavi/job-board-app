@@ -1,30 +1,36 @@
 'use client';
 import { useEffect, useState } from "react"
+import { useSession, signIn } from "next-auth/react";
 import '../../../styles/global.css';
 
 export default function JobList() {
+    const {data:session, status} = useSession();
     const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
         //Fetch jobs from backend API
-        const fetchJobs = async() => {
-            try {
-                const response = await fetch('/api/jobs');
-                const data = await response.json();
+        if (status == 'authenticated') {
+            const fetchJobs = async() => {
+                try {
+                    const response = await fetch('/api/jobs');
+                    const data = await response.json();
+    
+                    if (Array.isArray(data)) {
+                        setJobs(data);
+                    }
+                    else {
+                        console.error("Invalid jobs data:", error)
+                    }
+                } catch (error) {
+                    console.error("Error fetching jobs:", error);
+                }       
+            };
+            fetchJobs();
+        } else if (status == 'unauthenticated') {
+            signIn();
+        }
 
-                if (Array.isArray(data)) {
-                    setJobs(data);
-                }
-                else {
-                    console.error("Error fetching jobs:", error)
-                }
-            } catch (error) {
-                console.error("Error fetching jobs:", error);
-            }       
-        };
-
-        fetchJobs();
-    }, []);
+    }, [status]);
 
     const deleteJob = async (id) => {
         try {
@@ -41,6 +47,10 @@ export default function JobList() {
         } catch (error) {
             console.error('Error deleting job:', error);
         }
+    }
+
+    if (status === "loading") {
+        return <div>Loading...</div>
     }
 
     return (

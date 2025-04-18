@@ -11,7 +11,7 @@ model User {
   id       Int    @id @default(autoincrement())
   email    String @unique
   password String
-  jobs     Job[]
+  role     String @default("user")
 }
 
 model Job {
@@ -22,6 +22,4 @@ model Job {
   jobType     String
   postedDate  String
   createAt    DateTime @default(now())
-  userId      Int?
-  user        User?    @relation(fields: [userId], references: [id])
 }
