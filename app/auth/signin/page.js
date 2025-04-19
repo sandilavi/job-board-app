@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import '../../../styles/global.css';
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -25,10 +26,15 @@ export default function SignIn() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button type="submit">Sign In</button>
+        <div className="flex items-center justify-center min-h-screen">
+        <form onSubmit={handleSubmit} className="shadow-md bg-gray-100 p-3 rounded">
+            <h1 className="ml-2 text-2xl">Log In</h1>
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} 
+             className="px-4 py-2 border rounded border-gray-300 block m-2 w-100" />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} 
+             className="px-4 py-2 border rounded border-gray-300 block m-2 w-100" />
+            <button type="submit" className="px-4 py-2 rounded text-white bg-blue-500 block m-2 cursor-pointer hover:bg-blue-600">Sign In</button>
         </form>
+        </div>
     )
 }

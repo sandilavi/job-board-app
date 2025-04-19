@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    //Middleware configuration for restricted pages
+    middleware: ['/admin/*'],
+};
 
 export default nextConfig;
