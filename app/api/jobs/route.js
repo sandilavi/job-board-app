@@ -36,7 +36,7 @@ export async function POST(req) {
                 company: body.company,
                 location: body.location,
                 jobType: body.jobType,
-                postedDate: body.postedDate,
+                description: body.description,
                 userId: body.userId
             }
         })

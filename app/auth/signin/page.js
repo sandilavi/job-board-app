@@ -1,13 +1,21 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import '../../../styles/global.css';
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const {status} = useSession();
+
+    if (status === 'loading') return <div className="flex items-center justify-center min-h-screen text-4xl text-green-700">Loading...</div>
+    
+    if (status === 'authenticated') {
+        router.replace('/admin/job-list');
+        return null;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();

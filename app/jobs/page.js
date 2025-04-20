@@ -28,21 +28,22 @@ export default function JobList() {
 
     return (
         <div className='p-4'>
-            <h1 className='text-2xl font-bold mb-4'>Job Listings</h1>
+            <h1 className='text-2xl font-bold mb-3'>Job Listings</h1>
+            <p className="text-md mb-2 font-bold">{jobs.length} jobs are available</p>
             {jobs.length === 0? (
                 <p>No jobs posted yet!</p>
             ) : (
-                <ul className='space-y-4'>
-                    {jobs.map((job) => (
-                        <li key={job.id} className='border p-4 rounded shadow hover:shadow-md transition'>
-                            <h2 className='text-xl font-semibold'>{job.position}</h2>
-                            <p className='text-sm'>{job.company}</p>
-                            <p className='text-sm'>{job.location}</p>
-                            <p className='text-sm'>{job.jobType}</p>
-                            <p className='text-sm'>{job.postedDate}</p>
-                        </li>
-                    ))}
-                </ul>
+            <ul className='grid md:grid-cols-2 gap-4'>
+                {jobs.map((job) => (
+                    <li key={job.id} className='border p-4 rounded-xl'>
+                        <h2 className='text-2xl font-bold text-blue-600'>{job.position}</h2>
+                        <p className='text-sm text-gray-600 italic'>{job.company}</p>
+                        <p className='text-sm text-gray-700'>{job.location} | {job.jobType}</p>
+                        <p className='text-xs text-gray-500'>Posted on : {new Date(job.createAt).toLocaleDateString()}</p>
+                        <p className='text-sm mt-2 text-black-800'>{job.description}</p>
+                    </li>
+                ))}
+            </ul>
             )}
         </div>
     )

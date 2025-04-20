@@ -20,6 +20,6 @@ model Job {
   company     String
   location    String
   jobType     String
-  postedDate  String
-  createAt    DateTime @default(now())
+  description String
+  createAt    DateTime @default(dbgenerated("CURRENT_DATE"))
 }

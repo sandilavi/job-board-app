@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Navbar from "@/app/components/Navbar";
 import '../../../styles/global.css';
 
 export default function JobList() {
@@ -30,7 +31,7 @@ export default function JobList() {
         }
     }, [status, session]);
 
-    if (status !== 'authenticated') return <div>Loading...</div>
+    if (status !== 'authenticated') return <div className="flex items-center justify-center min-h-screen text-4xl text-green-700">Loading...</div>
 
     const deleteJob = async (id) => {
         try {
@@ -49,35 +50,55 @@ export default function JobList() {
         }
     }
 
-    const handleSignOut = () => {
-        signOut({callbackUrl:'/auth/signin'});
-    }
-
     return (
-        <div className='p-4'>
-            <h1 className='text-2xl font-bold mb-4'>Job Listings</h1>
-            {session && <div className="mb-1">Logged in as : {session.user.email}</div>}
-            <button onClick={handleSignOut} className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 mb-3">Sign Out</button>
+    <div>
+        <Navbar />
+        <div className="p-4">
+            <div className="flex justify-between w-full mb-4">
+                <h1 className='text-2xl font-bold'>Admin Dashboard</h1>
+                <button onClick={() => router.push('/admin/job-add')} className="bg-yellow-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-yellow-600">+ Add New Job</button>
+            </div>
+            <p className="text-md mb-3 font-bold">{jobs.length} jobs are available</p>
 
             {jobs.length === 0? (
                 <p>No jobs posted yet!</p>
             ) : (
-                <ul className='space-y-4'>
-                    {jobs.map((job) => (
-                        <li key={job.id} className='border p-4 rounded shadow hover:shadow-md transition'>
-                            <h2 className='text-xl font-semibold'>{job.position}</h2>
-                            <p className='text-sm'>{job.company}</p>
-                            <p className='text-sm'>{job.location}</p>
-                            <p className='text-sm'>{job.jobType}</p>
-                            <p className='text-sm'>{job.postedDate}</p>
-                            <button onClick={() => deleteJob(job.id)} className="bg-red-500 text-white px-4 py-2 rounded mt-2 cursor-pointer hover:bg-red-600">Delete Job</button>
-                        </li>
-                    ))}
-                </ul>
+            <table>
+            <thead className="bg-gray-200">
+            <tr>
+                <th className="text-left px-2 py-2">Position</th>
+                <th className="text-left px-2 py-2">Company</th>
+                <th className="text-left px-2 py-2">Location</th>
+                <th className="text-left px-2 py-2">Job Type</th>
+                <th className="text-left px-2 py-2">Posted Date</th>
+                <th className="text-left px-2 py-2">Description</th>
+                <th className="text-left px-2 py-2">Actions</th>
+            </tr>
+            </thead>
+
+            <tbody className="bg-gray-100">
+            {jobs.map((job) => (
+            <tr key={job.id}>
+                <td className="text-left px-2 py-2 text-gray-800 text-sm">{job.position}</td>
+                <td className="text-left px-2 py-2 text-gray-800 text-sm">{job.company}</td>
+                <td className="text-left px-2 py-2 text-gray-800 text-sm">{job.location}</td>
+                <td className="text-left px-2 py-2 text-gray-800 text-sm">{job.jobType}</td>
+                <td className="text-left px-2 py-2 text-gray-800 text-sm">{new Date(job.createAt).toLocaleDateString()}</td>
+                <td className="text-left px-2 py-2 text-gray-800 text-sm">{job.description}</td>          
+                <td className="text-left px-2 py-2">
+                <button onClick={() =>
+                    {if (confirm("Are you sure you want to delete this job?")) {
+                        deleteJob(job.id);
+                    }}}
+                    className="bg-red-500 text-white px-4 py-2 rounded mt-2 cursor-pointer hover:bg-red-600">Delete
+                </button>
+                </td>
+            </tr>
+            ))}
+            </tbody>
+            </table>
             )}
-            <div className="flex justify-center">
-                <button className="bg-yellow-500 text-white rounded px-4 py-2 cursor-pointer hover:bg-yellow-600 mt-3">+ Add a New Job</button>
-            </div>
         </div>
+    </div>
     )
 }
